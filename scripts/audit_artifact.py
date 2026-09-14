@@ -348,26 +348,39 @@ def audit_continuous_control(root: Path, violations: list[str]) -> dict[str, Any
     csv_family_check(s1_path, "S1", int(expected_s1 or 0))
     csv_family_check(s2_path, "S2", int(expected_s2 or 0))
 
-    direct_req = root / "requirements-continuous-control.txt"
-    if not direct_req.exists():
-        violations.append("continuous-control direct requirements file is missing")
+    canonical_req = root / "requirements.txt"
+    if not canonical_req.exists():
+        violations.append("canonical requirements.txt is missing")
     else:
-        unpinned = []
-        for raw_line in direct_req.read_text(encoding="utf-8").splitlines():
-            line = raw_line.strip()
-            if not line or line.startswith("#"):
+        lines = [
+            raw.strip()
+            for raw in canonical_req.read_text(encoding="utf-8").splitlines()
+            if raw.strip() and not raw.lstrip().startswith("#")
+        ]
+        required_prefixes = (
+            "gymnasium[mujoco]==",
+            "mujoco==",
+            "numpy==",
+            "pandas==",
+            "psutil==",
+            "PyYAML==",
+            "sb3-contrib==",
+            "scipy==",
+            "stable-baselines3==",
+            "torch==",
+        )
+        for prefix in required_prefixes:
+            if not any(line.startswith(prefix) for line in lines):
+                violations.append(f"canonical requirements missing continuous-control dependency: {prefix}")
+        for line in lines:
+            if line == "-e ." or " @ git+" in line:
                 continue
             if "==" not in line:
-                unpinned.append(line)
-        if unpinned:
-            violations.append(f"continuous-control direct requirements contain unpinned entries: {unpinned}")
+                violations.append(f"canonical requirements contain unpinned dependency: {line}")
 
-    tested_req = root / "requirements-tested-continuous-control.txt"
-    tested_sha = root / "requirements-tested-continuous-control.sha256"
-    if not tested_req.exists() or not tested_sha.exists():
-        violations.append("continuous-control tested environment freeze or SHA-256 is missing")
-    else:
-        parse_sha_manifest(tested_sha, root, violations)
+    obsolete = sorted(path.name for path in root.glob("requirements-*.txt"))
+    if obsolete:
+        violations.append(f"obsolete split requirements files remain: {obsolete}")
 
     return {
         "status": "PASS" if len(violations) == before else "FAIL",
@@ -427,10 +440,7 @@ def audit(root: Path, *, require_manifest: bool = False) -> dict[str, Any]:
     required = [
         "LICENSE", "README.md", "PROVENANCE.md", "REPRODUCIBILITY.md",
         "CITATION.cff", ".zenodo.json", ".gitignore", "pyproject.toml",
-        "requirements.txt", "requirements-tested.txt", "requirements-uav.txt",
-        "requirements-tested-uav.txt", "requirements-continuous-control.txt",
-        "requirements-tested-continuous-control.txt",
-        "requirements-tested-continuous-control.sha256",
+        "requirements.txt", "environment.yml",
         "configs/evidence_registry.json", "configs/claim_evidence_index.yaml",
         "configs/continuous_control/CONTINUOUS_CONTROL_PROTOCOL.yaml",
         "configs/continuous_control/CONTINUOUS_CONTROL_PROTOCOL_SHA256.txt",
