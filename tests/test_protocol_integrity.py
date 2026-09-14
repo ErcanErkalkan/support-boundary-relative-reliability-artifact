@@ -82,18 +82,42 @@ def test_continuous_control_protocol_and_analysis_counts_are_locked():
     assert analysis["S2_tests"] == 12
 
 
-def test_continuous_control_environment_freeze_sha_matches():
-    lock = ROOT / "requirements-tested-continuous-control.sha256"
-    line = lock.read_text(encoding="utf-8").strip()
-    expected, relative = line.split(maxsplit=1)
-    target = ROOT / relative.lstrip("*")
-    assert HASH_RE.match(expected)
-    assert target.is_file()
-    assert sha256(target) == expected
-    for raw in (ROOT / "requirements-continuous-control.txt").read_text(encoding="utf-8").splitlines():
-        line = raw.strip()
-        if line and not line.startswith("#"):
-            assert "==" in line, f"unpinned continuous-control dependency: {line}"
+def test_unified_requirements_are_pinned_and_cover_all_public_workflows():
+    requirements = ROOT / "requirements.txt"
+    assert requirements.is_file()
+    assert not list(ROOT.glob("requirements-*.txt"))
+
+    lines = [
+        raw.strip()
+        for raw in requirements.read_text(encoding="utf-8").splitlines()
+        if raw.strip() and not raw.lstrip().startswith("#")
+    ]
+    assert "-e ." in lines
+
+    required_prefixes = (
+        "gym-pybullet-drones @ git+",
+        "gymnasium[mujoco]==",
+        "matplotlib==",
+        "minigrid==",
+        "mujoco==",
+        "numpy==",
+        "pandas==",
+        "psutil==",
+        "pybullet==",
+        "PyYAML==",
+        "pytest==",
+        "sb3-contrib==",
+        "scipy==",
+        "stable-baselines3==",
+        "torch==",
+    )
+    for prefix in required_prefixes:
+        assert any(line.startswith(prefix) for line in lines), f"missing unified dependency: {prefix}"
+
+    for line in lines:
+        if line == "-e ." or " @ git+" in line:
+            continue
+        assert "==" in line, f"unpinned canonical dependency: {line}"
 
 
 def test_public_generators_have_no_private_manuscript_dependency():
