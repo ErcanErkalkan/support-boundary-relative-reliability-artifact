@@ -76,12 +76,6 @@ support-boundary-relative-reliability-artifact/
 ├── .zenodo.json
 ├── pyproject.toml
 ├── requirements.txt
-├── requirements-tested.txt
-├── requirements-uav.txt
-├── requirements-tested-uav.txt
-├── requirements-continuous-control.txt
-├── requirements-tested-continuous-control.txt
-├── requirements-tested-continuous-control.sha256
 ├── configs/
 │   ├── evidence_registry.json
 │   ├── claim_evidence_index.yaml
@@ -119,29 +113,23 @@ Protocol locks, seed registries, raw/aggregated outputs, and SHA-256 manifests p
 
 ## Installation
 
-### Core and discrete diagnostics
+### Unified environment
 
-Python 3.10 or newer is supported by the package metadata.
+The repository uses **one canonical dependency manifest: `requirements.txt`**. It covers the core/discrete diagnostics, test suite, PyBullet UAV diagnostics, and supplemental MuJoCo continuous-control benchmark. Python 3.12 or newer is recommended for a single all-in-one environment; the package metadata itself supports Python 3.10 or newer.
 
 ```bash
 python -m venv .venv
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python -m pip install -e .
 ```
 
-### PyBullet UAV diagnostics
+`requirements.txt` also installs the local `confidence-gated-q` package in editable mode, so a separate `pip install -e .` step is not required.
 
-The recorded UAV environment uses the pinned dependencies in `requirements-tested-uav.txt`. A Python 3.12 environment is recommended for compatibility with the recorded PyBullet stack.
-
-### Continuous-control supplemental benchmark
-
-Use a separate environment for this benchmark. `requirements-continuous-control.txt` contains exact pins for the direct runtime packages used by the runner. `requirements-tested-continuous-control.txt` is the full 32-package `pip freeze` snapshot recorded by the executed runs, with its SHA-256 stored in `requirements-tested-continuous-control.sha256`. The executed environment records Python 3.13.x, Gymnasium 1.3.0, Stable-Baselines3 2.9.0, sb3-contrib 2.9.0, MuJoCo 3.10.0, NumPy 2.5.1, pandas 3.0.5, psutil 7.2.2, PyYAML 6.0.3, SciPy 1.18.0, and Torch 2.13.0.
+The original registered executions used slightly different dependency snapshots for the UAV and continuous-control runs. Those historical versions are retained as provenance in [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md), while `requirements.txt` is the single current install surface for the repository.
 
 ## Quick verification
 
 ```bash
-python -m pip install -e .
 python scripts/reproduce_all.py --quick
 python -m pytest
 ```
@@ -154,7 +142,7 @@ To rerun the registered Environment A evidence families E01-E28, use:
 python scripts/reproduce_all.py --full
 ```
 
-The supplemental continuous-control grid is intentionally kept in its separate Environment B and can be rerun with:
+The supplemental continuous-control grid can be rerun from the same canonical environment with:
 
 ```bash
 python scripts/reproduce_all.py --continuous-control
