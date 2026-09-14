@@ -102,16 +102,33 @@ def build_minimal_public_tree(tmp_path: Path) -> Path:
             for i in range(count):
                 writer.writerow({"family": family, "contrast_id": i})
 
-    direct = root / "requirements-continuous-control.txt"
-    direct.write_text("numpy==2.5.1\npandas==3.0.5\nPyYAML==6.0.3\n", encoding="utf-8")
-    tested = root / "requirements-tested-continuous-control.txt"
-    tested.write_text("numpy==2.5.1\npandas==3.0.5\nPyYAML==6.0.3\n", encoding="utf-8")
-    _write_sha_manifest(root / "requirements-tested-continuous-control.sha256", [tested], root)
+    (root / "requirements.txt").write_text(
+        "-e .\n"
+        "gym-pybullet-drones @ git+https://github.com/utiasDSL/gym-pybullet-drones.git@9bc12bc583fa3b28807b2f90a8cadf09fb06e1ff\n"
+        "gymnasium[mujoco]==1.3.0\n"
+        "matplotlib==3.10.9\n"
+        "minigrid==3.1.0\n"
+        "mujoco==3.10.0\n"
+        "numpy==2.5.1\n"
+        "pandas==3.0.5\n"
+        "psutil==7.2.2\n"
+        "pybullet==3.2.7\n"
+        "PyYAML==6.0.3\n"
+        "pytest==9.0.3\n"
+        "sb3-contrib==2.9.0\n"
+        "scipy==1.18.0\n"
+        "stable-baselines3==2.9.0\n"
+        "torch==2.13.0\n",
+        encoding="utf-8",
+    )
+    (root / "environment.yml").write_text(
+        "name: confidence-gated-q\ndependencies:\n  - python>=3.12\n  - pip\n  - pip:\n      - -r requirements.txt\n",
+        encoding="utf-8",
+    )
 
     required = [
         ".gitignore", "LICENSE", "README.md", "PROVENANCE.md", "REPRODUCIBILITY.md", "CITATION.cff",
-        ".zenodo.json", "pyproject.toml", "requirements.txt", "requirements-tested.txt",
-        "requirements-uav.txt", "requirements-tested-uav.txt", "src/hybrid_q/agents.py",
+        ".zenodo.json", "pyproject.toml", "src/hybrid_q/agents.py",
         "scripts/reproduce_all.py", "scripts/audit_artifact.py", "scripts/preflight_release.py",
         "scripts/generate_tables.py", "scripts/generate_figures.py", "tests/test_agents.py",
         "tests/test_artifact_audit.py", "tests/test_protocol_integrity.py",
