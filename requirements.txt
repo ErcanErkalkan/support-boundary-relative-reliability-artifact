@@ -1,9 +1,25 @@
-gymnasium==1.3.0
-matplotlib==3.10.8
+# Canonical unified dependency set for the complete public artifact.
+# Covers core/discrete diagnostics, tests, PyBullet UAV diagnostics,
+# and the supplemental MuJoCo continuous-control benchmark.
+#
+# Recommended single-environment interpreter: Python 3.12+
+# (the package metadata itself supports Python >=3.10).
+
+-e .
+
+# Core + UAV + continuous-control runtime
+gym-pybullet-drones @ git+https://github.com/utiasDSL/gym-pybullet-drones.git@9bc12bc583fa3b28807b2f90a8cadf09fb06e1ff
+gymnasium[mujoco]==1.3.0
+matplotlib==3.10.9
 minigrid==3.1.0
-numpy==2.4.3
-pandas==3.0.1
-pyyaml==6.0.3
-pytest>=8.0
-scipy==1.17.1
-torch==2.11.0
+mujoco==3.10.0
+numpy==2.5.1
+pandas==3.0.5
+psutil==7.2.2
+pybullet==3.2.7
+PyYAML==6.0.3
+pytest==9.0.3
+sb3-contrib==2.9.0
+scipy==1.18.0
+stable-baselines3==2.9.0
+torch==2.13.0
