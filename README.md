@@ -1,10 +1,48 @@
 # Support-Boundary and Relative-Reliability Diagnostics for Hybrid Memory–Neural Reinforcement Learning
 
+[![Research article DOI](https://img.shields.io/badge/Research%20article-10.1016%2Fj.asoc.2026.116350-blue)](https://doi.org/10.1016/j.asoc.2026.116350)
+[![Artifact DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21897588.svg)](https://doi.org/10.5281/zenodo.21897588)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 This repository is the independent public reproducibility artifact for an audited study of support boundaries, estimator-relative reliability, fuzzy and crisp arbitration, fallback behavior, sensorized software-in-the-loop control, and continuous-control transfer diagnostics. The Python package retains the internal project name `confidence-gated-q` for import and package compatibility.
 
 The artifact is organized around one scientific question: under which support and estimator-reliability conditions can hybrid memory–neural control make auditable branch-selection decisions, and where do exact, approximate, fuzzy, crisp, fallback, or replay-support mechanisms fail under shift?
 
 The artifact does **not** establish a universally superior reinforcement-learning controller, calibrated correctness confidence, hardware readiness, flight safety, or operational deployment readiness.
+
+## Associated publication
+
+This repository is the reproducibility artifact associated with the following peer-reviewed research article:
+
+> **Ercan Erkalkan.** “Support-boundary and relative-reliability diagnostics for hybrid memory–neural reinforcement learning.” *Applied Soft Computing*, **204** (2027), 116350. DOI: [10.1016/j.asoc.2026.116350](https://doi.org/10.1016/j.asoc.2026.116350).
+
+Publisher page: https://www.sciencedirect.com/science/article/pii/S1568494626017989
+
+### Citation
+
+If this repository or its results are used in academic work, please cite the research article and, when reproducibility materials are specifically used, the software artifact as well. The repository-level citation metadata is also available in [`CITATION.cff`](CITATION.cff).
+
+**Research article — BibTeX**
+
+```bibtex
+@article{ERKALKAN2027116350,
+  title   = {Support-boundary and relative-reliability diagnostics for hybrid memory--neural reinforcement learning},
+  journal = {Applied Soft Computing},
+  volume  = {204},
+  pages   = {116350},
+  year    = {2027},
+  issn    = {1568-4946},
+  doi     = {10.1016/j.asoc.2026.116350},
+  url     = {https://www.sciencedirect.com/science/article/pii/S1568494626017989},
+  author  = {Ercan Erkalkan}
+}
+```
+
+**Reproducibility artifact**
+
+```text
+Erkalkan, E. (2026). Support-Boundary and Relative-Reliability Diagnostics for Hybrid Memory–Neural Reinforcement Learning: Reproducibility Artifact (Version 1.0.0). Zenodo. https://doi.org/10.5281/zenodo.21897588
+```
 
 ## Public/private boundary
 
@@ -184,6 +222,7 @@ python scripts/aggregate_continuous_control.py
 - Repository URL: https://github.com/ErcanErkalkan/support-boundary-relative-reliability-artifact
 - GitHub release: https://github.com/ErcanErkalkan/support-boundary-relative-reliability-artifact/releases/tag/v1.0.0
 - Zenodo DOI: https://doi.org/10.5281/zenodo.21897588
+- Associated article DOI: https://doi.org/10.1016/j.asoc.2026.116350
 
 No DOI or repository URL from an earlier public artifact series is reused by this artifact.
 
