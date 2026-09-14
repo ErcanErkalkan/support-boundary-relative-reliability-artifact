@@ -88,8 +88,8 @@ def run_legacy_e01_e16() -> None:
 
     if not has_uav_backend():
         raise RuntimeError(
-            "Full E01-E28 reproduction requires the recorded UAV environment. "
-            "Use the Python/UAV stack documented in requirements-tested-uav.txt."
+            "Full E01-E28 reproduction requires the UAV dependencies. "
+            "Install the canonical environment with: python -m pip install -r requirements.txt"
         )
     run("scripts/run_uav_validation.py")
     run("scripts/aggregate_uav_validation.py")
@@ -154,7 +154,7 @@ def run_full_e01_e28() -> None:
 
 
 def run_continuous_control_grid() -> None:
-    """Execute the frozen supplemental continuous-control grid in Environment B."""
+    """Execute the frozen supplemental continuous-control grid."""
     protocol_path = ROOT / "configs" / "continuous_control" / "CONTINUOUS_CONTROL_PROTOCOL.yaml"
     manifest_path = ROOT / "configs" / "continuous_control" / "CONTINUOUS_CONTROL_PROTOCOL_SHA256.txt"
     protocol = yaml.safe_load(protocol_path.read_text(encoding="utf-8"))
@@ -238,14 +238,13 @@ def run_release_preflight(*, require_manifest: bool) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "Reproduce and audit the confidence-gated-q public artifact. "
-            "Environment A covers E01-E28; Environment B covers the supplemental continuous-control grid."
+            "Reproduce and audit the confidence-gated-q public artifact from the canonical unified environment."
         )
     )
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--quick", action="store_true", help="Run tests, smoke reproduction, and full public-artifact integrity checks without expensive retraining.")
-    mode.add_argument("--full", action="store_true", help="Rerun E01-E28 in the compact/UAV environment, regenerate public outputs, then audit the registered artifact.")
-    mode.add_argument("--continuous-control", action="store_true", help="Rerun the frozen 30-agent supplemental continuous-control grid in its separate tested environment.")
+    mode.add_argument("--full", action="store_true", help="Rerun E01-E28, regenerate public outputs, then audit the registered artifact.")
+    mode.add_argument("--continuous-control", action="store_true", help="Rerun the frozen 30-agent supplemental continuous-control grid.")
     mode.add_argument("--audit-only", action="store_true", help="Audit existing registered outputs without running experiments or smoke tests.")
     mode.add_argument("--preflight", action="store_true", help="Run compile, pytest, protocol/hash, and public-artifact audits without training or regenerating scientific results.")
     parser.add_argument("--require-manifest", action="store_true", help="With --audit-only or --preflight, require complete final MANIFEST.sha256 frozen-release coverage.")
