@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this reproducibility artifact, cite this software artifact and the associated research article when available."
+message: "If you use this reproducibility artifact, cite this software artifact and the associated research article."
 title: "Support-Boundary and Relative-Reliability Diagnostics for Hybrid Memory–Neural Reinforcement Learning: Reproducibility Artifact"
 type: software
 authors:
@@ -13,3 +13,18 @@ doi: "10.5281/zenodo.21897588"
 repository-code: "https://github.com/ErcanErkalkan/support-boundary-relative-reliability-artifact"
 url: "https://doi.org/10.5281/zenodo.21897588"
 license: MIT
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Erkalkan"
+      given-names: "Ercan"
+      affiliation: "Vocational School of Technical Sciences, Department of Electronics and Automation, Artificial Intelligence Operator Program, Marmara University"
+      orcid: "https://orcid.org/0000-0001-9259-7112"
+  title: "Support-boundary and relative-reliability diagnostics for hybrid memory–neural reinforcement learning"
+  journal: "Applied Soft Computing"
+  volume: 204
+  start: 116350
+  year: 2027
+  issn: "1568-4946"
+  doi: "10.1016/j.asoc.2026.116350"
+  url: "https://www.sciencedirect.com/science/article/pii/S1568494626017989"
